@@ -1,37 +1,37 @@
 package com.example.departmental_equipment_procurement_management.model;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "requests")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Request {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "requestID")
-    private Integer requestID;
+    @Column(name = "userID")
+    private Integer userID;
 
-    @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @Column(name = "fullName", nullable = false)
+    private String fullName;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @ManyToOne
     @JoinColumn(name = "departmentID")
     private Department department;
-
-    @Column(name = "requestDate")
-    private Date requestDate;
-
-    @Column(name = "status")
-    private String status;
 }
+

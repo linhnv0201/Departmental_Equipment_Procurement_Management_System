@@ -9,29 +9,33 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "requests")
+@Table(name = "purchased_equipments")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Request {
+public class PurchasedEquipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "requestID")
-    private Integer requestID;
+    @Column(name = "purchasedEquipmentID")
+    private Integer purchasedEquipmentID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "equipmentID")
+    private Equipment equipment;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "purchaseDate")
+    private Date purchaseDate;
+
+    @Column(name = "purchasePrice")
+    private Double purchasePrice;
 
     @ManyToOne
     @JoinColumn(name = "departmentID")
     private Department department;
-
-    @Column(name = "requestDate")
-    private Date requestDate;
-
-    @Column(name = "status")
-    private String status;
 }
+

@@ -7,21 +7,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "suppliers")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Department {
+public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "departmentID")
-    private Integer departmentID;
+    @Column(name = "supplierID")
+    private Integer supplierID;
 
-    @Column(name = "departmentName", nullable = false)
-    private String departmentName;
+    @Column(name = "supplierName", nullable = false)
+    private String supplierName;
 
-    @Column(name = "budget")
-    private Integer budget;
+    @Column(name = "contactInfo")
+    private String contactInfo;
+
+    @Column(name = "address")
+    private String address;
 }
