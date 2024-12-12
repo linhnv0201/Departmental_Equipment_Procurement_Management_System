@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "employees")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userID")
-    private Integer userID;
+    @Column(name = "employeeID")
+    private Integer employeeID;
 
     @Column(name = "fullName", nullable = false)
     private String fullName;
@@ -31,7 +31,7 @@ public class User {
     private String position;
 
     @ManyToOne
-    @JoinColumn(name = "departmentID")
+    @JoinColumn(name = "departmentID", referencedColumnName = "departmentID")
     private Department department;
 }
 

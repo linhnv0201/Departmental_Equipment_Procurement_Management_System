@@ -30,7 +30,7 @@ public class Approval {
 
     @ManyToOne
     @JoinColumn(name = "approvedBy")
-    private User approvedBy;
+    private Employee approvedBy;
 
     @Column(name = "comments")
     private String comments;

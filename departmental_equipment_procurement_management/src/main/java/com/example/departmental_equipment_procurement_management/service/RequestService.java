@@ -29,7 +29,7 @@ public class RequestService {
     RequestEquipmentRepository requestEquipmentRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private EmployeeRepository employeeRepository;
 
     public Request createRequest(Request request, List<RequestEquipment> equipmentList) {
         // Lưu yêu cầu vào DB

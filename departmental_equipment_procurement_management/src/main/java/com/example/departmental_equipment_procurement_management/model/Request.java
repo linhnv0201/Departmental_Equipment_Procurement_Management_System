@@ -22,8 +22,8 @@ public class Request {
     private Integer requestID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "employeeID")
+    private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "departmentID")
