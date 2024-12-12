@@ -27,8 +27,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "position", nullable = false)
+    private String position;
 
     @ManyToOne
     @JoinColumn(name = "departmentID")
