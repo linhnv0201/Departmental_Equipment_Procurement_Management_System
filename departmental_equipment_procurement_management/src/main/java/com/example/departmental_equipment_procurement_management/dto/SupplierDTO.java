@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class SupplierDTO {
-    private Integer supplierID;
     @NotEmpty
     private String supplierName;
     @NotEmpty

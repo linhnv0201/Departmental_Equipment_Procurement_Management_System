@@ -1,10 +1,12 @@
 package com.example.departmental_equipment_procurement_management.service;
 
+import com.example.departmental_equipment_procurement_management.dto.EmployeeDTO;
+import com.example.departmental_equipment_procurement_management.model.Department;
 import com.example.departmental_equipment_procurement_management.model.Employee;
+import com.example.departmental_equipment_procurement_management.repository.DepartmentRepository;
 import com.example.departmental_equipment_procurement_management.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,53 +17,82 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    // Create (Thêm mới nhân viên)
-    @Transactional
-    public Employee createEmployee(Employee employee) {
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+
+    // Thêm nhân viên mới từ EmployeeDTO
+    public Employee addEmployee(EmployeeDTO employeeDTO) {
+        // Kiểm tra trùng email
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new IllegalArgumentException("Email đã tồn tại");
+        }
+
+        // Lấy thông tin phòng ban từ tên phòng ban
+        Department department = departmentRepository.findByDepartmentName(employeeDTO.getDepartmentName())
+                .orElseThrow(() -> new IllegalArgumentException("Phòng ban không tồn tại"));
+
+        // Tạo đối tượng Employee từ EmployeeDTO và gán thông tin
+        Employee employee = new Employee();
+        employee.setFullName(employeeDTO.getFullName());
+        employee.setEmail(employeeDTO.getEmail());
+        employee.setPassword(employeeDTO.getPassword());
+        employee.setPosition(employeeDTO.getPosition());
+        employee.setDepartment(department);
+
+        // Gán role tự động dựa trên phòng ban
+//        employee.getRole(); // Phương thức gán role tự động
+
         return employeeRepository.save(employee);
     }
 
-    // Read (Lấy danh sách tất cả nhân viên)
+
+    // Cập nhật thông tin nhân viên
+    public Employee updateEmployee(int empId, EmployeeDTO employeeDTO) {
+        Employee employee = employeeRepository.findById(empId)
+                .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại"));
+
+        // Kiểm tra trùng email (ngoại trừ email của chính nhân viên đó)
+        Optional<Employee> existingEmployeeWithEmail = Optional.ofNullable(employeeRepository.findByEmail(employeeDTO.getEmail()));
+        if (existingEmployeeWithEmail.isPresent() && existingEmployeeWithEmail.get().getEmployeeID() != empId) {
+            throw new IllegalArgumentException("Email đã tồn tại");
+        }
+
+        // Tìm và gán lại Department
+        Department department = departmentRepository.findByDepartmentName(employeeDTO.getDepartmentName())
+                .orElseThrow(() -> new IllegalArgumentException("Phòng ban không tồn tại"));
+
+        // Cập nhật các trường cần thiết
+        employee.setFullName(employeeDTO.getFullName());
+        employee.setEmail(employeeDTO.getEmail());
+        employee.setPassword(employeeDTO.getPassword()); // Mã hóa mật khẩu
+        employee.setPosition(employeeDTO.getPosition());
+        employee.setDepartment(department);
+
+        return employeeRepository.save(employee);
+    }
+
+    // Xóa nhân viên theo ID
+    public void deleteEmployee(int empId) {
+        if (!employeeRepository.existsById(empId)) {
+            throw new IllegalArgumentException("Nhân viên không tồn tại");
+        }
+        employeeRepository.deleteById(empId);
+    }
+
+    // Lấy tất cả nhân viên
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
-    // Read (Lấy nhân viên theo ID)
-    public Optional<Employee> getEmployeeById(Integer employeeID) {
-        return employeeRepository.findById(employeeID);
+    // Lấy nhân viên theo ID
+    public Employee getEmployeeById(int empId) {
+        return employeeRepository.findById(empId)
+                .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại"));
     }
 
-    // Read (Lấy nhân viên theo DepartmentID)
-    public List<Employee> getEmployeesByDepartmentId(int id) {
-        return employeeRepository.findByDepartmentID(id);
-    }
-
-    @Transactional
-    public Employee updateEmployee(Integer employeeID, Employee employee) {
-        Optional<Employee> existingEmployee = employeeRepository.findById(employeeID);
-        if (existingEmployee.isPresent()) {
-            Employee updatedEmployee = existingEmployee.get();
-
-            updatedEmployee.setFullName(employee.getFullName());
-            updatedEmployee.setEmail(employee.getEmail());
-            updatedEmployee.setPosition(employee.getPosition());
-            // Cập nhật thông tin phòng ban qua đối tượng Department
-            updatedEmployee.setDepartment(employee.getDepartment());
-
-            return employeeRepository.save(updatedEmployee);
-        }
-        return null; // Nếu không tìm thấy nhân viên
-    }
-
-
-    // Delete (Xóa nhân viên)
-    @Transactional
-    public boolean deleteEmployee(Integer employeeID) {
-        Optional<Employee> existingEmployee = employeeRepository.findById(employeeID);
-        if (existingEmployee.isPresent()) {
-            employeeRepository.delete(existingEmployee.get());
-            return true;
-        }
-        return false; // Nếu không tìm thấy nhân viên
+    // Lấy nhân viên theo phòng ban
+    public List<Employee> getEmployeesByDepartmentName(String departmentName) {
+        return employeeRepository.findByDepartmentDepartmentName(departmentName);
     }
 }

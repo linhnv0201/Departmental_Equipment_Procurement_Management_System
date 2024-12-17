@@ -15,8 +15,6 @@ public class EquipmentDTO {
     @NotEmpty
     private Integer purchasePeriod;
     @NotEmpty
-    private BigDecimal estimatedCost;
-    @NotEmpty
     private Integer supplierID;
     @NotEmpty
     private BigDecimal currentPrice;

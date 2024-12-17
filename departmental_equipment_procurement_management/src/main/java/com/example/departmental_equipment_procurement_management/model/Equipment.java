@@ -28,9 +28,6 @@ public class Equipment {
     @Column(name = "purchasePeriod")
     private Integer purchasePeriod;
 
-    @Column(name = "estimatedCost")
-    private Double estimatedCost;
-
     @ManyToOne
     @JoinColumn(name = "supplierID")
     private Supplier supplier;
