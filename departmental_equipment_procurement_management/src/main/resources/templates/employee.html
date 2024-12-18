@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ Nhân Viên</title>
+    <!-- Liên kết Bootstrap 5 và Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7fc;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 30px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar a {
+            color: white;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            border-radius: 4px;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .tab-content {
+            margin-top: 20px;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h3 class="text-center text-white">Dashboard Nhân Viên</h3>
+    <a href="#" onclick="showTab('departmentInfo')">Thông Tin Phòng Ban</a>
+    <a href="#" onclick="showTab('personalInfo')">Thông Tin Cá Nhân</a>
+    <a href="#" onclick="showTab('requests')">Yêu Cầu Mua Sắm</a>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Thông Tin Phòng Ban -->
+        <div id="departmentInfo" class="tab-pane">
+            <h2>Thông Tin Phòng Ban</h2>
+            <p>Phòng ban bạn đang làm việc là: Phòng Quản Lý</p>
+            <p>Số lượng nhân viên trong phòng: 15</p>
+            <button class="btn btn-info">Chi Tiết</button>
+        </div>
+
+        <!-- Thông Tin Cá Nhân -->
+        <div id="personalInfo" class="tab-pane">
+            <h2>Thông Tin Cá Nhân</h2>
+            <p><strong>Tên:</strong> Nguyễn Văn A</p>
+            <p><strong>Email:</strong> a.nguyen@example.com</p>
+            <p><strong>Vị trí:</strong> Nhân viên</p>
+            <button class="btn btn-info">Cập Nhật Thông Tin</button>
+        </div>
+
+        <!-- Yêu Cầu Mua Sắm -->
+        <div id="requests" class="tab-pane">
+            <h2>Yêu Cầu Mua Sắm</h2>
+            <button class="btn btn-primary mb-3" onclick="showTab('createRequest')">Tạo Yêu Cầu Mua Sắm</button>
+            <div class="card">
+                <div class="card-header">
+                    Danh Sách Yêu Cầu
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mã Yêu Cầu</th>
+                            <th>Trạng Thái</th>
+                            <th>Ngày Tạo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>REQ-001</td>
+                            <td>Chưa Phê Duyệt</td>
+                            <td>2024-12-01</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>REQ-002</td>
+                            <td>Đã Phê Duyệt</td>
+                            <td>2024-12-02</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tạo Yêu Cầu Mua Sắm -->
+        <div id="createRequest" class="tab-pane">
+            <h2>Tạo Yêu Cầu Mua Sắm</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="equipment" class="form-label">Chọn Thiết Bị</label>
+                    <select class="form-select" id="equipment">
+                        <option>Thiết bị 1</option>
+                        <option>Thiết bị 2</option>
+                        <option>Thiết bị 3</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Số Lượng</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Nhập số lượng">
+                </div>
+                <button type="submit" class="btn btn-success">Gửi Yêu Cầu</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript để chuyển đổi tab -->
+<script>
+    // Hiển thị nội dung của tab được chọn
+    function showTab(tabId) {
+        var tabContents = document.querySelectorAll('.tab-pane');
+        tabContents.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+
+        var activeTab = document.getElementById(tabId);
+        activeTab.classList.add('active');
+    }
+
+    // Mặc định hiển thị tab đầu tiên (Thông Tin Phòng Ban)
+    showTab('departmentInfo');
+</script>
+
+<!-- Liên kết các thư viện JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

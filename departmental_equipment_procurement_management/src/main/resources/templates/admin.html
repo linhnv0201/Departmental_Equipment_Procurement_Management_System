@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Liên kết Bootstrap 5 và Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7fc;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 30px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar a {
+            color: white;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            border-radius: 4px;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h3 class="text-center text-white mb-4">Phân loại </h3>
+    <a href="#" id="viewDepartmentsBtn">Xem Phòng Ban</a>
+    <a href="#" id="viewEquipmentsBtn">Xem Thiết Bị</a>
+    <a href="#" id="viewSuppliersBtn">Xem Nhà Cung Cấp</a>
+    <a href="#" id="viewRequestsBtn">Xem Yêu Cầu Phê Duyệt</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <div id="departmentsContent">
+        <div class="d-flex justify-content-between mb-3">
+            <h2>Danh Sách Phòng Ban</h2>
+            <button class="btn btn-success" onclick="window.location.href='/add-department'">Thêm Phòng Ban</button>
+        </div>
+        <!-- Danh sách phòng ban -->
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên Phòng Ban</th>
+                <th>Ngân Sách</th>
+                <th>Hành Động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Giả sử có danh sách phòng ban từ backend -->
+            <tr>
+                <td>1</td>
+                <td>Phòng Quản Lý</td>
+                <td>5000000</td>
+                <td>
+                    <button class="btn btn-info" onclick="viewDepartmentDetails(1)">Xem Chi Tiết</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Phòng Tài Chính</td>
+                <td>3000000</td>
+                <td>
+                    <button class="btn btn-info" onclick="viewDepartmentDetails(2)">Xem Chi Tiết</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Danh sách Thiết Bị -->
+    <div id="equipmentsContent" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h2>Danh Sách Thiết Bị</h2>
+            <button class="btn btn-success" onclick="window.location.href='/add-equipment'">Thêm Thiết Bị</button>
+        </div>
+        <!-- Danh sách thiết bị -->
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên Thiết Bị</th>
+                <th>Giá</th>
+                <th>Nhà Cung Cấp</th>
+                <th>Hành Động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Giả sử có danh sách thiết bị từ backend -->
+            <tr>
+                <td>1</td>
+                <td>Máy Tính Xách Tay</td>
+                <td>15000000</td>
+                <td>Supplier A</td>
+                <td>
+                    <button class="btn btn-warning" onclick="editEquipment(1)">Sửa</button>
+                    <button class="btn btn-danger" onclick="deleteEquipment(1)">Xóa</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Máy Chiếu</td>
+                <td>10000000</td>
+                <td>Supplier B</td>
+                <td>
+                    <button class="btn btn-warning" onclick="editEquipment(2)">Sửa</button>
+                    <button class="btn btn-danger" onclick="deleteEquipment(2)">Xóa</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Danh sách Nhà Cung Cấp -->
+    <div id="suppliersContent" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h2>Danh Sách Nhà Cung Cấp</h2>
+            <button class="btn btn-success" onclick="window.location.href='/add-supplier'">Thêm Nhà Cung Cấp</button>
+        </div>
+        <!-- Danh sách nhà cung cấp -->
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên Nhà Cung Cấp</th>
+                <th>Thông Tin Liên Lạc</th>
+                <th>Địa Chỉ</th>
+                <th>Hành Động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Giả sử có danh sách nhà cung cấp từ backend -->
+            <tr>
+                <td>1</td>
+                <td>Supplier A</td>
+                <td>123-456-789</td>
+                <td>123 Đường ABC</td>
+                <td>
+                    <button class="btn btn-info" onclick="viewSupplierDetails(1)">Xem Chi Tiết</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Supplier B</td>
+                <td>987-654-321</td>
+                <td>456 Đường XYZ</td>
+                <td>
+                    <button class="btn btn-info" onclick="viewSupplierDetails(2)">Xem Chi Tiết</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Liên kết JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Chuyển đổi giữa các phần content
+    document.getElementById('viewDepartmentsBtn').onclick = function() {
+        document.getElementById('departmentsContent').classList.remove('d-none');
+        document.getElementById('equipmentsContent').classList.add('d-none');
+        document.getElementById('suppliersContent').classList.add('d-none');
+    };
+
+    document.getElementById('viewEquipmentsBtn').onclick = function() {
+        document.getElementById('departmentsContent').classList.add('d-none');
+        document.getElementById('equipmentsContent').classList.remove('d-none');
+        document.getElementById('suppliersContent').classList.add('d-none');
+    };
+
+    document.getElementById('viewSuppliersBtn').onclick = function() {
+        document.getElementById('departmentsContent').classList.add('d-none');
+        document.getElementById('equipmentsContent').classList.add('d-none');
+        document.getElementById('suppliersContent').classList.remove('d-none');
+    };
+    document.getElementById('viewRequestsBtn').onclick = function() {
+    };
+
+    // Placeholder functions for actions like edit, delete, etc.
+    function viewDepartmentDetails(id) {
+        alert("Xem thông tin phòng ban với ID: " + id);
+    }
+
+    function editEquipment(id) {
+        alert("Sửa thiết bị với ID: " + id);
+    }
+
+    function deleteEquipment(id) {
+        alert("Xóa thiết bị với ID: " + id);
+    }
+
+    function viewSupplierDetails(id) {
+        alert("Xem thông tin nhà cung cấp với ID: " + id);
+    }
+</script>
+</body>
+</html>
