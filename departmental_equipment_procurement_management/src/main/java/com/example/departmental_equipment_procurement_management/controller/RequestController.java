@@ -26,13 +26,22 @@ public class RequestController {
         return requestService.getAllRequests();
     }
 
-    // Lấy yêu cầu theo ID
+    // Lấy yêu cầu theo ID request
     @GetMapping("/{id}")
     public ResponseEntity<Request> getRequestById(@PathVariable Integer id) {
         Optional<Request> request = requestService.getRequestById(id);
         return request.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    // Lấy all request của 1 nhân viên
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<Request>> getAllRequestOf1Employee(@PathVariable Integer id) {
+        List<Request> list = requestService.getAllRequestsOfEmployee(id);
+        return ResponseEntity.ok(list);
+    }
+
+
 
     //Lấy equipment theo từng request
     @GetMapping("equipment/{id}")
@@ -69,15 +78,20 @@ public class RequestController {
 //        requestService.deleteRequest(id);
 //        return ResponseEntity.noContent().build();
 //    }
+
+    // Toàn bộ thiết bị đã mua
     @GetMapping("/purchasedEquipment")
     public ResponseEntity<List<PurchasedEquipment>> getPurchasedEquipment() {
         List<PurchasedEquipment> list = requestService.getAllPurchasedEquipments();
         return ResponseEntity.ok(list);
     }
 
+    // Lấy thiết bị đã mua cúa 1 phòng ban
     @GetMapping("purchasedEquipment/department/{id}")
     public ResponseEntity<List<PurchasedEquipment>> getPurchasedEquipmentByDepartment(@PathVariable Integer id) {
         List<PurchasedEquipment> list = requestService.getPurchasedEquipmentsDepartment(id);
         return ResponseEntity.ok(list);
     }
+
+
 }

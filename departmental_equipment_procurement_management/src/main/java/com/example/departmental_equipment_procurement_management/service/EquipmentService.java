@@ -3,6 +3,7 @@ package com.example.departmental_equipment_procurement_management.service;
 import com.example.departmental_equipment_procurement_management.dto.EquipmentDTO;
 import com.example.departmental_equipment_procurement_management.model.Department;
 import com.example.departmental_equipment_procurement_management.model.Equipment;
+import com.example.departmental_equipment_procurement_management.model.Request;
 import com.example.departmental_equipment_procurement_management.model.Supplier;
 import com.example.departmental_equipment_procurement_management.repository.EquipmentRepository;
 import com.example.departmental_equipment_procurement_management.repository.SupplierRepository;
@@ -75,7 +76,7 @@ public class EquipmentService {
     }
 
 
-    // Tìm thiết bị theo id
+    // Tìm thiết bị theo phong ban
     public Optional<Equipment> getEquipmentByID(int id) {
         return equipmentRepository.findById(id);
     }
@@ -88,4 +89,5 @@ public class EquipmentService {
         // Lấy danh sách thiết bị từ nhà cung cấp
         return equipmentRepository.findBySupplier(supplier);
     }
+
 }

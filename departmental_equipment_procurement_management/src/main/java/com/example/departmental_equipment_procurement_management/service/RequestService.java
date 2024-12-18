@@ -133,5 +133,9 @@ public class RequestService {
 //        requestRepository.deleteById(requestId);
 //    }
 
+    //tìm request theo employee tao ra
+    public List<Request> getAllRequestsOfEmployee(Integer employeeID) {
+        return requestRepository.findAllRequestOfAnEmployee(employeeID);
+    }
 
 }
