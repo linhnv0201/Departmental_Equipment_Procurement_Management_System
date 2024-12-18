@@ -2,8 +2,6 @@ package com.example.departmental_equipment_procurement_management.controller;
 
 import com.example.departmental_equipment_procurement_management.dto.EquipmentDTO;
 import com.example.departmental_equipment_procurement_management.model.Equipment;
-import com.example.departmental_equipment_procurement_management.model.Supplier;
-import com.example.departmental_equipment_procurement_management.repository.EquipmentRepository;
 import com.example.departmental_equipment_procurement_management.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/equipment")
@@ -56,6 +55,13 @@ public class EquipmentController {
     public ResponseEntity<List<Equipment>> getAllEquipments() {
         List<Equipment> equipments = equipmentService.getAllEquipments();
         return new ResponseEntity<>(equipments, HttpStatus.OK);
+    }
+
+    // Lay bang ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Equipment>> getEquipmentById(@PathVariable("id") int equipmentID) {
+        Optional<Equipment> equipment = equipmentService.getEquipmentByID(equipmentID);
+        return new ResponseEntity<>(equipment, HttpStatus.OK);
     }
 
     // API để lấy danh sách thiết bị theo nhà cung cấp

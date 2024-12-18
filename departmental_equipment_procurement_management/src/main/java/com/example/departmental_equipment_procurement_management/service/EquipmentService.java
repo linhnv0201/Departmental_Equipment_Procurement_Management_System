@@ -74,6 +74,7 @@ public class EquipmentService {
         return equipmentRepository.findAll();
     }
 
+
     // Tìm thiết bị theo id
     public Optional<Equipment> getEquipmentByID(int id) {
         return equipmentRepository.findById(id);

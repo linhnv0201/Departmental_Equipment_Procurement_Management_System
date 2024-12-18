@@ -95,4 +95,9 @@ public class EmployeeService {
     public List<Employee> getEmployeesByDepartmentName(String departmentName) {
         return employeeRepository.findByDepartmentDepartmentName(departmentName);
     }
+
+    //Lay nhan vien theo email
+    public Employee findEmployeeByEmail(String email) {
+        return employeeRepository.findByEmail(email);
+    }
 }

@@ -29,6 +29,9 @@ public class Request {
     @JoinColumn(name = "departmentID")
     private Department department;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "requestDate")
     private Date requestDate;
 

@@ -1,17 +1,15 @@
 package com.example.departmental_equipment_procurement_management.service;
 
-import com.example.departmental_equipment_procurement_management.model.Approval;
-import com.example.departmental_equipment_procurement_management.model.Department;
-import com.example.departmental_equipment_procurement_management.model.Request;
-import com.example.departmental_equipment_procurement_management.model.RequestEquipment;
+import com.example.departmental_equipment_procurement_management.dto.RequestDTO;
+import com.example.departmental_equipment_procurement_management.model.*;
 import com.example.departmental_equipment_procurement_management.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestService {
@@ -20,64 +18,120 @@ public class RequestService {
     private RequestRepository requestRepository;
 
     @Autowired
-    private ApprovalRepository approvalRepository;
+    private RequestEquipmentRepository requestEquipmentRepository;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
+    private PurchasedEquipmentRepository purchasedEquipmentRepository;
 
     @Autowired
-    RequestEquipmentRepository requestEquipmentRepository;
+    private EquipmentRepository equipmentRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Request createRequest(Request request, List<RequestEquipment> equipmentList) {
-        // Lưu yêu cầu vào DB
-        request.setStatus("Pending");
-        requestRepository.save(request);
 
-        // Lưu các thiết bị yêu cầu
-        for (RequestEquipment equipment : equipmentList) {
-            equipment.setRequest(request);
-            requestEquipmentRepository.save(equipment);
-        }
-
-        return request;
+    // Lấy tất cả yêu cầu
+    public List<Request> getAllRequests() {
+        return requestRepository.findAll();
     }
 
-//    public boolean approveRequest(int requestId, int approverId, String comments) {
-//        Optional<Request> request = requestRepository.findById(requestId);
-//        if (request.isPresent()) {
-//            Request req = request.get();
-//            if (req.getStatus().equals("Pending")) {
-//                // Kiểm tra ngân sách phòng ban
-//                Department department = departmentRepository.findById(req.getDepartmentID()).get();
-//                if (department.getBudget() < calculateTotalCost(req)) {
-//                    return false; // Ngân sách không đủ
-//                }
-//
-//                // Phê duyệt yêu cầu
-//                Approval approval = new Approval();
-//                approval.setRequest(req);
-//                approval.setApprovedBy(approverId);
-//                approval.setComments(comments);
-//                approval.setApprovedDate(LocalDate.now());
-//                approvalRepository.save(approval);
-//
-//                req.setStatus("Approved");
-//                requestRepository.save(req);
-//                return true;
-//            }
-//        }
-//        return false;
+    // Lấy yêu cầu theo ID
+    public Optional<Request> getRequestById(Integer requestId) {
+        return requestRepository.findById(requestId);
+    }
+
+    // Lấy tất cả thiết bị đã mua
+    public List<PurchasedEquipment> getAllPurchasedEquipments() {
+        return purchasedEquipmentRepository.findAll();
+    }
+
+    // Lấy thiết bị đã mua từng phòng ban
+    public List<PurchasedEquipment> getPurchasedEquipmentsDepartment(Integer departmentId) {
+        return purchasedEquipmentRepository.findByDepartmentId(departmentId);
+    }
+
+
+    // Lưu yêu cầu mới từ RequestDTO
+    public Request saveRequest(RequestDTO requestDTO) throws Exception {
+        // Chuyển đổi từ RequestDTO sang thực thể Request
+        Request request = new Request();
+
+        // Tìm Employee và Department theo tên
+        Employee employee = employeeRepository.findById(requestDTO.getEmployeeID())
+                .orElseThrow(() -> new Exception("Employee not found"));
+        request.setEmployee(employee);
+
+        request.setDepartment(employee.getDepartment());
+
+        request.setDescription(requestDTO.getDescription());
+
+        request.setStatus("Pending");
+
+        request.setRequestDate(new Date()); // Lấy thời gian hiện tại
+
+        // Lưu thông tin Request trước
+        Request savedRequest = requestRepository.save(request);
+
+        // Duyệt qua danh sách thiết bị và lưu vào bảng request_equipments
+        List<RequestEquipment> requestEquipments = requestDTO.getRequestEquipments().stream()
+                .map(dto -> {
+                    RequestEquipment requestEquipment = new RequestEquipment();
+                    requestEquipment.setRequest(savedRequest);
+
+                    // Lấy thiết bị từ EquipmentRepository
+                    Optional<Equipment> equipment = equipmentRepository.findById(dto.getEquipmentID());
+                    if (equipment.isPresent()) {
+                        requestEquipment.setEquipment(equipment.get());
+                        requestEquipment.setQuantity(dto.getQuantity());
+                    }
+                    return requestEquipment;
+                })
+                .collect(Collectors.toList());
+
+        // Lưu danh sách requestEquipments vào DB
+        requestEquipmentRepository.saveAll(requestEquipments);
+
+        return savedRequest;  // Trả về Request đã lưu
+    }
+
+    public List<RequestEquipment> getEquipmentByRequestId(Integer requestId) {
+        return requestEquipmentRepository.findByRequestId(requestId);
+    }
+
+
+//     Cập nhật trạng thái của yêu cầu
+    public Request updateRequestStatus(Integer requestId, String status) {
+        Optional<Request> requestOpt = requestRepository.findById(requestId);
+        if (requestOpt.isPresent()) {
+            Request request = requestOpt.get();
+            request.setStatus(status);
+
+            if ("APPROVED".equalsIgnoreCase(request.getStatus())) {
+                // Khi trạng thái là "APPROVED", chuyển các RequestEquipment thành PurchasedEquipment
+                for (RequestEquipment requestEquipment : requestEquipmentRepository.findByRequestId(request.getRequestID())) {
+                    PurchasedEquipment purchasedEquipment = new PurchasedEquipment();
+
+                    purchasedEquipment.setEquipment(requestEquipment.getEquipment());
+                    purchasedEquipment.setQuantity(requestEquipment.getQuantity());
+                    purchasedEquipment.setPurchaseDate(new Date());
+                    purchasedEquipment.setPurchasePrice(requestEquipment.getEquipment().getCurrentPrice());
+                    purchasedEquipment.setDepartment(request.getDepartment());
+
+                    // Lưu PurchasedEquipment vào DB
+                    purchasedEquipmentRepository.save(purchasedEquipment);
+                }
+            }
+
+            return requestRepository.save(request); // Cập nhật trạng thái
+        } else {
+            return null; // Nếu không tìm thấy Request
+        }
+    }
+
+    // Xóa yêu cầu
+//    public void deleteRequest(Integer requestId) {
+//        requestRepository.deleteById(requestId);
 //    }
 
-//    private BigDecimal calculateTotalCost(Request request) {
-//        BigDecimal totalCost = BigDecimal.ZERO;
-//        for (RequestEquipment equipment : request.getRequestEquipments()) {
-//            totalCost = totalCost.add(equipment.getEquipment().getEstimatedCost().multiply(new BigDecimal(equipment.getQuantity())));
-//        }
-//        return totalCost;
-//    }
+
 }
-

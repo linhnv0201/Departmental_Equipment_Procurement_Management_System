@@ -38,7 +38,7 @@ public class EmployeeController {
     }
 
     // Lấy tất cả nhân viên
-    @GetMapping
+    @GetMapping("/getall")
     public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);
