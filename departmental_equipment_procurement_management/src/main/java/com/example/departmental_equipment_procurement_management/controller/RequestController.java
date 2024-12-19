@@ -42,6 +42,13 @@ public class RequestController {
     }
 
 
+    // Lấy all request của 1 phòng ban bằng id phòng
+    @GetMapping("all/department/{id}")
+    public ResponseEntity<List<Request>> getAllRequestOf1Deparment(@PathVariable Integer id) {
+        List<Request> list = requestService.getAllRequestsOfDepartment(id);
+        return ResponseEntity.ok(list);
+    }
+
 
     //Lấy equipment theo từng request
     @GetMapping("equipment/{id}")

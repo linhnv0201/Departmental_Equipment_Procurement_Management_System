@@ -138,4 +138,9 @@ public class RequestService {
         return requestRepository.findAllRequestOfAnEmployee(employeeID);
     }
 
+    // Lấy request của 1 department theo departmentId
+    public List<Request> getAllRequestsOfDepartment(Integer departmentID) {
+        return requestRepository.findAllRequestOfAnDepartment(departmentID);
+    }
+
 }

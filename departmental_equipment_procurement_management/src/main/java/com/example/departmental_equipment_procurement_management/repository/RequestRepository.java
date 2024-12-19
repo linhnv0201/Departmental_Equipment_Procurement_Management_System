@@ -12,8 +12,12 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
 
-    //find all RE same request
+    //find all request of a employee
     @Query("SELECT re FROM Request re WHERE re.employee.employeeID = :employeeid")
     List<Request> findAllRequestOfAnEmployee(@Param("employeeid") Integer employeeid);
+
+    //find all request of a department
+    @Query("SELECT re FROM Request re WHERE re.department.departmentID = :departmentid")
+    List<Request> findAllRequestOfAnDepartment(@Param("departmentid") Integer departmentid);
 
 }
