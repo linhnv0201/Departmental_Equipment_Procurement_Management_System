@@ -35,6 +35,7 @@ public class EmployeeService {
         // Tạo đối tượng Employee từ EmployeeDTO và gán thông tin
         Employee employee = new Employee();
         employee.setFullName(employeeDTO.getFullName());
+        employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setEmail(employeeDTO.getEmail());
         employee.setPassword(employeeDTO.getPassword());
         employee.setPosition(employeeDTO.getPosition());
@@ -64,6 +65,7 @@ public class EmployeeService {
 
         // Cập nhật các trường cần thiết
         employee.setFullName(employeeDTO.getFullName());
+        employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setEmail(employeeDTO.getEmail());
         employee.setPassword(employeeDTO.getPassword()); // Mã hóa mật khẩu
         employee.setPosition(employeeDTO.getPosition());
