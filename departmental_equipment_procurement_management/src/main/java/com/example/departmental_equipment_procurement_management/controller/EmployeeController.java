@@ -16,6 +16,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+
     // Thêm nhân viên mới
     @PostMapping
     public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
@@ -52,9 +53,9 @@ public class EmployeeController {
     }
 
     // Lấy danh sách nhân viên theo tên phòng ban
-    @GetMapping("/department/{departmentName}")
-    public ResponseEntity<List<Employee>> getEmployeesByDepartmentName(@PathVariable String departmentName) {
-        List<Employee> employees = employeeService.getEmployeesByDepartmentName(departmentName);
+    @GetMapping("/department/{departmentID}")
+    public ResponseEntity<List<Employee>> getEmployeesByDepartmentID(@PathVariable int departmentID) {
+        List<Employee> employees = employeeService.getEmployeesByDepartmentID(departmentID);
         return ResponseEntity.ok(employees);
     }
 }

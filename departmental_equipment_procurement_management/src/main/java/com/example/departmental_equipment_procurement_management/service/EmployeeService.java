@@ -93,9 +93,14 @@ public class EmployeeService {
                 .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại"));
     }
 
-    // Lấy nhân viên theo phòng ban
+    // Lấy nhân viên theo tên phòng ban
     public List<Employee> getEmployeesByDepartmentName(String departmentName) {
         return employeeRepository.findByDepartmentDepartmentName(departmentName);
+    }
+
+    // Lấy nhân viên theo id phòng ban
+    public List<Employee> getEmployeesByDepartmentID(int departmentID) {
+        return employeeRepository.findAllEmployeesByDepartmentID(departmentID);
     }
 
     //Lay nhan vien theo email
