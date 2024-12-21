@@ -9,5 +9,5 @@ public class DepartmentDTO {
     @NotEmpty
     private String departmentName;
     @NotEmpty
-    private Integer budget;
+    private Double budget;
 }

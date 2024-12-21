@@ -3,6 +3,7 @@ package com.example.departmental_equipment_procurement_management.service;
 import com.example.departmental_equipment_procurement_management.dto.RequestDTO;
 import com.example.departmental_equipment_procurement_management.model.*;
 import com.example.departmental_equipment_procurement_management.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class RequestService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
 
     // Lấy tất cả yêu cầu
@@ -104,12 +108,14 @@ public class RequestService {
 
 
 //     Cập nhật trạng thái của yêu cầu
+    @Transactional
     public Request updateRequestStatus(Integer requestId, String status) {
         Optional<Request> requestOpt = requestRepository.findById(requestId);
         if (requestOpt.isPresent()) {
             Request request = requestOpt.get();
             request.setStatus(status);
 
+            double totalCost = 0;
             if ("APPROVED".equalsIgnoreCase(request.getStatus())) {
                 // Khi trạng thái là "APPROVED", chuyển các RequestEquipment thành PurchasedEquipment
                 for (RequestEquipment requestEquipment : requestEquipmentRepository.findByRequestId(request.getRequestID())) {
@@ -122,9 +128,19 @@ public class RequestService {
                     purchasedEquipment.setPurchasePrice(requestEquipment.getEquipment().getCurrentPrice());
                     purchasedEquipment.setDepartment(request.getDepartment());
 
+                    totalCost += requestEquipment.getQuantity() * requestEquipment.getEquipment().getCurrentPrice();
                     // Lưu PurchasedEquipment vào DB
                     purchasedEquipmentRepository.save(purchasedEquipment);
                 }
+            }
+
+            double currentBudget = request.getDepartment().getBudget();
+            if (currentBudget >= totalCost) {
+                // Nếu ngân sách đủ, trừ đi chi phí
+                request.getDepartment().setBudget(currentBudget - totalCost);
+            } else {
+                // Nếu ngân sách không đủ, trả về null hoặc throw exception
+                throw new IllegalArgumentException("Ngân sách không đủ để duyệt yêu cầu.");
             }
 
             return requestRepository.save(request); // Cập nhật trạng thái
@@ -132,11 +148,6 @@ public class RequestService {
             return null; // Nếu không tìm thấy Request
         }
     }
-
-    // Xóa yêu cầu
-//    public void deleteRequest(Integer requestId) {
-//        requestRepository.deleteById(requestId);
-//    }
 
     //tìm request theo employee tao ra
     public List<Request> getAllRequestsOfEmployee(Integer employeeID) {

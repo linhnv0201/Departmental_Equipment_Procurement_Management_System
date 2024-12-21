@@ -22,5 +22,5 @@ public class Department {
     private String departmentName;
 
     @Column(name = "budget")
-    private Integer budget;
+    private Double budget;
 }
