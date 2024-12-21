@@ -21,8 +21,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query("SELECT e FROM Employee e WHERE e.department.departmentID = :departmentid")
     List<Employee> findAllEmployeesByDepartmentID(@Param("departmentid") int departmentid);
 
-    List<Employee> findByDepartmentDepartmentName(String departmentName);
-
+//    // Sử dụng JPQL để truy vấn
+    @Query("SELECT e.department FROM Employee e WHERE e.email = :email")
+    Department findDepartmentByEmail(@Param("email") String email);
 
 }
 

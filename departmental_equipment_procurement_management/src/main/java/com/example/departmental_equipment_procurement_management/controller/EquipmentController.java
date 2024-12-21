@@ -6,6 +6,7 @@ import com.example.departmental_equipment_procurement_management.service.Equipme
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EquipmentController {
 
     // Thêm mới thiết bị
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Equipment> addEquipment(@RequestBody EquipmentDTO equipmentDTO) {
         Equipment equipment = equipmentService.addEquipment(equipmentDTO);
         return new ResponseEntity<>(equipment, HttpStatus.CREATED);
@@ -28,6 +30,7 @@ public class EquipmentController {
 
     // Cập nhật thiết bị
     @PutMapping("/{equipmentID}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Equipment> updateEquipment(
             @PathVariable Integer equipmentID,
             @RequestBody EquipmentDTO equipmentDTO) {
@@ -41,6 +44,7 @@ public class EquipmentController {
 
     // Xóa thiết bị
     @DeleteMapping("/{equipmentID}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteEquipment(@PathVariable Integer equipmentID) {
         try {
             equipmentService.deleteEquipment(equipmentID);
@@ -52,6 +56,7 @@ public class EquipmentController {
 
     // Lấy danh sách thiết bị
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Equipment>> getAllEquipments() {
         List<Equipment> equipments = equipmentService.getAllEquipments();
         return new ResponseEntity<>(equipments, HttpStatus.OK);
@@ -59,6 +64,7 @@ public class EquipmentController {
 
     // Lay bang ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Optional<Equipment>> getEquipmentById(@PathVariable("id") int equipmentID) {
         Optional<Equipment> equipment = equipmentService.getEquipmentByID(equipmentID);
         return new ResponseEntity<>(equipment, HttpStatus.OK);
@@ -66,6 +72,7 @@ public class EquipmentController {
 
     // API để lấy danh sách thiết bị theo nhà cung cấp
     @GetMapping("/supplier/{supplierId}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Equipment>> getEquipmentBySupplier(@PathVariable Integer supplierId) {
         List<Equipment> equipments = equipmentService.getEquipmentBySupplier(supplierId);
         return new ResponseEntity<>(equipments, HttpStatus.OK);

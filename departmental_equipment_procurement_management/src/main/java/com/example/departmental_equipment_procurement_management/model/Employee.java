@@ -39,7 +39,7 @@ public class Employee {
 
     public String getRole() {
         // Kiểm tra xem phòng ban có tồn tại không và kiểm tra tên phòng ban
-        if (this.department != null && "Phòng Quản lý".equals(this.department.getDepartmentName())) {
+        if (this.department != null && "Phòng Quản Lý".equalsIgnoreCase(this.department.getDepartmentName())) {
             return "ROLE_ADMIN";  // Vai trò admin cho phòng Quản lý
         }
         return "ROLE_USER";  // Vai trò user cho các phòng ban khác

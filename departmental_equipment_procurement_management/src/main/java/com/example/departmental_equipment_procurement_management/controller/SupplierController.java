@@ -5,6 +5,7 @@ import com.example.departmental_equipment_procurement_management.service.Supplie
 import com.example.departmental_equipment_procurement_management.dto.SupplierDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class SupplierController {
 
     //Get all supplier
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Supplier>> getAllSuppliers() {
         return ResponseEntity.ok(supplierService.getAllSuppliers());
     }
 
     // Lấy thông tin nhà cung cấp theo ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Object> getSupplierById(@PathVariable("id") Integer id) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         if (supplier != null) {
@@ -35,6 +38,7 @@ public class SupplierController {
 
     // Thêm nhà cung cấp mới
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Supplier> addSupplier(@RequestBody SupplierDTO supplierDTO) {
         Supplier newSupplier = supplierService.addSupplier(supplierDTO);
         return ResponseEntity.ok(newSupplier);  // Trả về nhà cung cấp vừa được thêm
@@ -42,6 +46,7 @@ public class SupplierController {
 
     // Cập nhật thông tin nhà cung cấp
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Supplier> updateSupplier(@PathVariable Integer id, @RequestBody SupplierDTO supplierDTO) {
         Supplier updatedSupplier = supplierService.updateSupplier(id, supplierDTO);
         if (updatedSupplier != null) {
@@ -53,6 +58,7 @@ public class SupplierController {
 
     // Xóa nhà cung cấp
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteSupplier(@PathVariable Integer id) {
         boolean isDeleted = supplierService.deleteSupplier(id);
         if (isDeleted) {

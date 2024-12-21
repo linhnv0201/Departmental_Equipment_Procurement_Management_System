@@ -6,6 +6,7 @@ import com.example.departmental_equipment_procurement_management.model.Employee;
 import com.example.departmental_equipment_procurement_management.repository.DepartmentRepository;
 import com.example.departmental_equipment_procurement_management.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class EmployeeService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Thêm nhân viên mới từ EmployeeDTO
     public Employee addEmployee(EmployeeDTO employeeDTO) {
@@ -37,7 +40,8 @@ public class EmployeeService {
         employee.setFullName(employeeDTO.getFullName());
         employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setEmail(employeeDTO.getEmail());
-        employee.setPassword(employeeDTO.getPassword());
+//        employee.setPassword(employeeDTO.getPassword());
+        employee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
         employee.setPosition(employeeDTO.getPosition());
         employee.setDepartment(department);
 
@@ -67,7 +71,8 @@ public class EmployeeService {
         employee.setFullName(employeeDTO.getFullName());
         employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setEmail(employeeDTO.getEmail());
-        employee.setPassword(employeeDTO.getPassword()); // Mã hóa mật khẩu
+//        employee.setPassword(employeeDTO.getPassword()); // Mã hóa mật khẩu
+        employee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
         employee.setPosition(employeeDTO.getPosition());
         employee.setDepartment(department);
 
@@ -93,11 +98,6 @@ public class EmployeeService {
                 .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại"));
     }
 
-    // Lấy nhân viên theo tên phòng ban
-    public List<Employee> getEmployeesByDepartmentName(String departmentName) {
-        return employeeRepository.findByDepartmentDepartmentName(departmentName);
-    }
-
     // Lấy nhân viên theo id phòng ban
     public List<Employee> getEmployeesByDepartmentID(int departmentID) {
         return employeeRepository.findAllEmployeesByDepartmentID(departmentID);
@@ -106,5 +106,10 @@ public class EmployeeService {
     //Lay nhan vien theo email
     public Employee findEmployeeByEmail(String email) {
         return employeeRepository.findByEmail(email);
+    }
+
+    // Lấy phòng của user đang dăng nhập
+    public Department findDepartmentByEmail(String email) {
+        return employeeRepository.findDepartmentByEmail(email);
     }
 }
