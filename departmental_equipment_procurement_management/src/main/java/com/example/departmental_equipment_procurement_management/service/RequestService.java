@@ -49,6 +49,10 @@ public class RequestService {
     public List<PurchasedEquipment> getPurchasedEquipmentsDepartment(Integer departmentId) {
         return purchasedEquipmentRepository.findByDepartmentId(departmentId);
     }
+    // Lấy thiết bị đã mua theo request id
+    public List<PurchasedEquipment> getPurchasedEquipmentsByRequestId(Integer requestId) {
+        return purchasedEquipmentRepository.findByRequestID(requestId);
+    }
 
 
     // Lưu yêu cầu mới từ RequestDTO
@@ -112,6 +116,7 @@ public class RequestService {
                     PurchasedEquipment purchasedEquipment = new PurchasedEquipment();
 
                     purchasedEquipment.setEquipment(requestEquipment.getEquipment());
+                    purchasedEquipment.setRequest(requestEquipment.getRequest());
                     purchasedEquipment.setQuantity(requestEquipment.getQuantity());
                     purchasedEquipment.setPurchaseDate(new Date());
                     purchasedEquipment.setPurchasePrice(requestEquipment.getEquipment().getCurrentPrice());

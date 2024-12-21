@@ -100,5 +100,11 @@ public class RequestController {
         return ResponseEntity.ok(list);
     }
 
+    // Lấy thiết bị đã mua cúa 1 request
+    @GetMapping("purchasedEquipment/request/{id}")
+    public ResponseEntity<List<PurchasedEquipment>> getPurchasedEquipmentByRequest(@PathVariable Integer id) {
+        List<PurchasedEquipment> list = requestService.getPurchasedEquipmentsByRequestId(id);
+        return ResponseEntity.ok(list);
+    }
 
 }

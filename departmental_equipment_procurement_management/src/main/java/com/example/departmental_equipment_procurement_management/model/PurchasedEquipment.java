@@ -25,6 +25,10 @@ public class PurchasedEquipment {
     @JoinColumn(name = "equipmentID")
     private Equipment equipment;
 
+    @ManyToOne
+    @JoinColumn(name = "requestID")
+    private Request request;
+
     @Column(name = "quantity")
     private Integer quantity;
 

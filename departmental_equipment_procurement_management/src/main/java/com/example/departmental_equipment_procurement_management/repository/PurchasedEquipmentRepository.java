@@ -12,5 +12,11 @@ public interface PurchasedEquipmentRepository extends JpaRepository<PurchasedEqu
     //find all PE same department
     @Query("SELECT pe FROM PurchasedEquipment pe WHERE pe.department.departmentID = :departmentId")
     List<PurchasedEquipment> findByDepartmentId(int departmentId);
+
+    //find all PE same request
+    @Query("SELECT pe FROM PurchasedEquipment pe WHERE pe.request.requestID = :requestId")
+    List<PurchasedEquipment> findByRequestID(int requestId);
+
+
 }
 
