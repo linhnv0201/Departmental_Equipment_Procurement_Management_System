@@ -2,6 +2,7 @@ package com.example.departmental_equipment_procurement_management.controller;
 
 import com.example.departmental_equipment_procurement_management.dto.RequestDTO;
 import com.example.departmental_equipment_procurement_management.model.*;
+import com.example.departmental_equipment_procurement_management.repository.DepartmentRepository;
 import com.example.departmental_equipment_procurement_management.service.EmployeeService;
 import com.example.departmental_equipment_procurement_management.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class RequestController {
 
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     // Lấy tất cả yêu cầu
     @GetMapping
@@ -48,6 +51,14 @@ public class RequestController {
         return ResponseEntity.ok(list);
     }
 
+    // Lấy all request của 1 department
+    @GetMapping("/all/department/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<Request>> getAllRequestOf1Department(@PathVariable Integer id) {
+        List<Request> list = requestService.getAllRequestsOfDepartment(id);
+        return ResponseEntity.ok(list);
+    }
+
     // Lấy all request của người hiện tại
     @GetMapping("/all/currentuser")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
@@ -58,13 +69,6 @@ public class RequestController {
         return ResponseEntity.ok(list);
     }
 
-    // Lấy all request của 1 phòng ban bằng id phòng ban
-    @GetMapping("all/department/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<Request>> getAllRequestOf1Deparment(@PathVariable Integer id) {
-        List<Request> list = requestService.getAllRequestsOfDepartment(id);
-        return ResponseEntity.ok(list);
-    }
 
     // Lấy all request của phòng ban của người hiện tại
     @GetMapping("all/department/currentuser")
