@@ -1,5 +1,6 @@
 package com.example.departmental_equipment_procurement_management.controller;
 
+import com.example.departmental_equipment_procurement_management.dto.DepartmentDTO;
 import com.example.departmental_equipment_procurement_management.model.Department;
 import com.example.departmental_equipment_procurement_management.repository.DepartmentRepository;
 import com.example.departmental_equipment_procurement_management.service.DepartmentService;
@@ -38,12 +39,19 @@ public class DepartmentController {
     }
 
     // Thêm mới phòng ban
+//    @PostMapping
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
+//        Department savedDepartment = departmentService.addDepartment(department);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartment);
+//    }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
+    public ResponseEntity<Department> addDepartment(@RequestBody DepartmentDTO department) {
         Department savedDepartment = departmentService.addDepartment(department);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartment);
     }
+
 
     // Cập nhật phòng ban
     @PutMapping("/{id}")

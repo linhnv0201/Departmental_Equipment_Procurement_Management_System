@@ -1,5 +1,6 @@
 package com.example.departmental_equipment_procurement_management.service;
 
+import com.example.departmental_equipment_procurement_management.dto.DepartmentDTO;
 import com.example.departmental_equipment_procurement_management.model.Department;
 import com.example.departmental_equipment_procurement_management.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ public class DepartmentService {
     private DepartmentRepository departmentRepository;
 
     // Thêm phòng ban mới, kiểm tra trùng tên
-    public Department addDepartment(Department department) {
+    public Department addDepartment(DepartmentDTO departmentDTO) {
         // Kiểm tra xem phòng ban đã tồn tại chưa
-        if (departmentRepository.existsByDepartmentName(department.getDepartmentName())) {
+        if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
             throw new IllegalArgumentException("Phòng ban đã tồn tại");
         }
+        Department department = new Department();
+        department.setDepartmentName(departmentDTO.getDepartmentName());
+        department.setBudget(departmentDTO.getBudget());
 
         // Nếu không trùng, tiến hành lưu phòng ban mới
         return departmentRepository.save(department);
