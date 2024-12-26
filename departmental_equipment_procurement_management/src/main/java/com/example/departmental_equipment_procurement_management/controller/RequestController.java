@@ -92,6 +92,9 @@ public class RequestController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<Request> createRequest(@RequestBody RequestDTO requestDTO) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee employee = employeeService.findEmployeeByEmail(email);
+        requestDTO.setEmployeeID(employee.getEmployeeID());
         try {
             Request savedRequest = requestService.saveRequest(requestDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedRequest);
