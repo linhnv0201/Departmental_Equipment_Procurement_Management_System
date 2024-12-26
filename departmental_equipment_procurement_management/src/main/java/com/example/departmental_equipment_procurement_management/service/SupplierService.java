@@ -8,6 +8,7 @@ import com.example.departmental_equipment_procurement_management.model.Supplier;
 import com.example.departmental_equipment_procurement_management.repository.SupplierRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -46,7 +47,7 @@ public class SupplierService {
         if (existingSupplier.isPresent()) {
             Supplier supplier = existingSupplier.get();
             // Kiểm tra xem tên nhà cung cấp mới có bị trùng không
-            if (supplierRepository.existsBySupplierName(supplierDTO.getSupplierName())) {
+            if (supplierRepository.existsBySupplierName(supplierDTO.getSupplierName()) && !Objects.equals(supplier.getSupplierID(), supplierID)) {
                 throw new IllegalArgumentException("Nhà cung cấp với tên này đã tồn tại.");
             }
 

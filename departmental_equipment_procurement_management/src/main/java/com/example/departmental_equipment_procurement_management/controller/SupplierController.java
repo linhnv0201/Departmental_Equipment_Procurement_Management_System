@@ -49,11 +49,7 @@ public class SupplierController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Supplier> updateSupplier(@PathVariable Integer id, @RequestBody SupplierDTO supplierDTO) {
         Supplier updatedSupplier = supplierService.updateSupplier(id, supplierDTO);
-        if (updatedSupplier != null) {
-            return ResponseEntity.ok(updatedSupplier);  // Trả về nhà cung cấp đã cập nhật
-        } else {
-            return ResponseEntity.notFound().build();  // Không tìm thấy nhà cung cấp
-        }
+            return ResponseEntity.ok(updatedSupplier);
     }
 
     // Xóa nhà cung cấp

@@ -53,7 +53,7 @@ public class RequestController {
 
     // Lấy all request của 1 department
     @GetMapping("/all/department/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<List<Request>> getAllRequestOf1Department(@PathVariable Integer id) {
         List<Request> list = requestService.getAllRequestsOfDepartment(id);
         return ResponseEntity.ok(list);
